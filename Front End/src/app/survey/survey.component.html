@@ -1,0 +1,127 @@
+<app-header></app-header>
+<!-- Heading -->
+<div>
+    <p class="display-2 heading">Surveys </p>
+</div>
+<div class="container text-light">
+    <h1>{{heading}}</h1>
+    <hr />
+</div>
+<!-- Search Bar -->
+<div class="pb-4 container">
+    <form class="form-inline">
+        <input class="shadow form-control mr-sm-2 ml-auto" type="search" name="search" placeholder="Search"
+            aria-label="Search" [(ngModel)]="searchKey">
+        <button class="shadow btn btn-outline-success my-4 my-sm-0" type="submit"
+            (click)="searchSurvey(searchKey)">Search</button>
+    </form>
+</div>
+
+<!-- Optional search results -->
+<div style="height: 19em" class="container text-light" *ngIf="isSearched">
+    <p>{{searchResult}}</p>
+    <table class="table table-hover table-success" *ngIf="isFound">
+        <caption></caption>
+        <thead class="thead-dark">
+            <tr>
+                <th scope="col">ID</th>
+                <th scope="col">Description</th>
+                <th scope="col">isActive</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <th id="hid">{{searchResponce.id}}</th>
+                <td>{{searchResponce.description}}</td>
+                <td>{{searchResponce.isActive}}</td>
+            </tr>
+        </tbody>
+    </table>
+    <button class="center text-light btn btn-sm btn-outline-secondary mt-3 px-5" (click)="toogleDisplay()">Show all
+        Surveys</button>
+</div>
+<!-- All surveys -->
+<div class="container text-light" *ngIf="displaySurvey">
+    <table class="table table-hover">
+        <caption></caption>
+        <thead class="thead-dark">
+            <tr>
+                <th scope="col">ID</th>
+                <th scope="col">Description</th>
+                <th scope="col">isActive</th>
+                <!-- <th scope="col">publishedDateTime</th>
+                <th scope="col">endDateTime</th> -->
+                <th scope="col">Deactivation</th>
+                <th scope="col">Modify</th>
+                <th scope="col">Delete</th>
+            </tr>
+        </thead>
+        <tbody *ngFor="let survey of allsurveys; let index = index">
+            <tr
+                [ngClass]="{'table-danger': 0 === index % 3, 'table-success': 1 === index % 3, 'table-primary': 2 === index % 3}">
+                <th id="hid">{{survey.id}}</th>
+                <td>{{survey.description}}</td>
+                <td scope="col">{{survey.isActive}}</td>
+                <!-- <td scope="col">{{survey.publishedDateTime}}</td>
+                    <td scope="col">{{survey.endDateTime}}</td> -->
+                <td><button class="btn btn-sm btn-primary" (click)="closesurvey(survey.id)">Deactivate</button></td>
+                <td><button class="btn btn-sm btn-info" (click)="showForm2(survey.id)">Update </button></td>
+                <td><button class="btn btn-sm btn-danger" (click)="removesurvey(survey.id)">Remove </button></td>
+            </tr>
+        </tbody>
+    </table>
+    <p class="mb-5 center">{{allsurveys.length}}&nbsp;surveys showing.</p>
+</div>
+<!-- Getting add form -->
+<div class="container text-light" *ngIf="!isAdding && !isUpdating">
+    <button class="btn btn-primary px-5" (click)="showForm()">Add survey</button>
+</div>
+<!-- Adding survey -->
+<div style="height: 19em" class="container text-light" *ngIf="isAdding">
+    <p>Enter the data below:</p>
+
+    <form (ngSubmit)="addsurvey()" #userForm="ngForm">
+
+        <input type="text" class="mt-4 form-group form-control mb-1" id="description" required
+            [(ngModel)]="tempsurvey.description" name="description" #description="ngModel"
+            placeholder="survey Description" autofocus [class.is-invalid]='description.invalid && description.touched'>
+        <div *ngIf="description.errors && (description.invalid && description.touched)">
+            <small class="text-danger" *ngIf='description.errors.required'> Survey Description must not be empty</small>
+        </div>
+
+        <input type="text" class="mt-4 form-group form-control mb-1" id="isActive" required
+            [(ngModel)]="tempsurvey.isActive" name="isActive" #isActive="ngModel" placeholder="isActive" autofocus
+            [class.is-invalid]='isActive.invalid && isActive.touched'>
+        <div *ngIf="isActive.errors && (isActive.invalid && isActive.touched)">
+            <small class="text-danger" *ngIf='isActive.errors.required'> isActive must not be empty</small>
+        </div>
+
+        <!-- <input type="date" class="mt-4 form-group form-control mb-1" id="publishedDateTime" required
+            [(ngModel)]="tempsurvey.publishedDateTime" name="publishedDateTime" #name="ngModel" placeholder="publishedDateTime"
+            autofocus>
+
+        <input type="date" class="mt-4 form-group form-control mb-1" id="publishedDateTime" required
+            [(ngModel)]="tempsurvey.endDateTime" name="publishedDateTime" #name="ngModel" placeholder="EndDateTime" autofocus> -->
+
+        <button class="mt-4 btn btn-lg btn-primary" type="submit" [disabled]="!userForm.form.valid">Add survey</button>
+    </form>
+    <button class="center btn btn-sm btn-outline-secondary mt-3 px-5" (click)="toogleDisplay()">Show all survey</button>
+</div>
+
+<!-- Updating Survey -->
+<div style="height: 19em" class="container text-light" *ngIf="isUpdating && !isSearched">
+    <p>Enter the data below:</p>
+
+    <form (ngSubmit)="updateSurvey()" #userForm="ngForm">
+        <input type="text" class="form-group form-control mb-1" id="name" required [(ngModel)]="tempsurvey.description"
+            name="name" #description="ngModel" placeholder="Survey Description" autofocus
+            [class.is-invalid]='description.invalid && description.touched'>
+        <div *ngIf="description.errors && (description.invalid && description.touched)">
+            <small class="text-danger" *ngIf='description.errors.required'> Survey Description must not be empty</small>
+        </div>
+
+        <button class="mt-4 btn btn-lg btn-primary" type="submit" [disabled]=" !userForm.form.valid">Update
+            survey</button>
+    </form>
+    <button class="center btn btn-sm btn-outline-secondary mt-3 px-5" (click)="toogleDisplay()">Show all survey</button>
+</div>

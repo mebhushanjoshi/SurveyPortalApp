@@ -1,0 +1,27 @@
+@import url('https://fonts.googleapis.com/css2?family=Girassol&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Shippori+Mincho&display=swap');
+.heading{
+    font-family: 'Girassol', cursive;
+    text-align: center;
+    margin-top: 0.1em;
+    padding-top: 1.4em;
+    padding-bottom: 2.0em;
+    color: white;
+    background-image: url(https://www.notifyvisitors.com/blog/wp-content/uploads/2020/08/What-are-online-surveys_banner-1.jpg) ;
+    background-size: cover;
+    background-position: 50%;
+    background-repeat: no-repeat;
+}
+.paraText{
+    font-family: 'Shippori Mincho', serif;
+    font-size: 1.5em;
+    color: rgb(59, 63, 54);
+    font-weight: bold;
+}
+.center{
+    margin: 0;
+    position: absolute;
+    left: 50%;
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+  }

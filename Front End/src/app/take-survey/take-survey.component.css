@@ -1,0 +1,39 @@
+@import url('https://fonts.googleapis.com/css2?family=Girassol&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Shippori+Mincho&display=swap');
+.heading{
+    font-family: 'Girassol', cursive;
+    text-align: center;
+    margin-top: 0.1em;
+    padding-top: 2.4em;
+    padding-bottom: 4.0em;
+    color: rgb(250, 250, 250);
+    /* background-image: url(https://miro.medium.com/max/1000/1*lcEqSf358NBZVMaWdUkktQ.jpeg) ; */
+    background-image: url(https://prod.smassets.net/assets/cms/cc/uploads//2-5ways-survey-data-1.jpg);
+    background-size: cover;
+    background-position: 50%;
+    background-repeat: no-repeat;
+}
+.paraText{
+    font-family: 'Shippori Mincho', serif;
+    font-size: 1.5em;
+    color: rgb(59, 63, 54);
+    font-weight: bold;
+}
+.center{
+    margin: 0;
+    position: absolute;
+    left: 50%;
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+  }
+
+  .question{
+    background-color: rgb(158, 221, 221);  
+    font-size: 2.5em;
+    color: rgb(0, 0, 0);
+    border-radius: 1em;
+  }
+
+  .small{
+    font-size: 0.5em;
+  }

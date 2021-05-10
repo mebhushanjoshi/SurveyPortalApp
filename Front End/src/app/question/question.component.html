@@ -1,0 +1,121 @@
+<!-- <p>question works!</p> -->
+<app-header></app-header>
+<!-- Heading -->
+<div>
+    <p class="display-2 heading">Questions </p>
+</div>
+<div class="container text-light">
+    <h1>{{heading}}</h1>
+    <hr />
+</div>
+<!-- Search Bar -->
+<div class="pb-4 container">
+    <form class="form-inline">
+        <input class="shadow form-control mr-sm-2 ml-auto" type="search" name="search" placeholder="Search"
+            aria-label="Search" [(ngModel)]="searchKey">
+        <button class="shadow btn btn-outline-success my-4 my-sm-0" type="submit"
+            (click)="searchQuestion(searchKey)">Search</button>
+    </form>
+</div>
+<!-- Optional search results -->
+<div style="height: 19em;" class="container text-light" *ngIf="isSearched">
+    <p>{{searchResult}}</p>
+    <table class="table table-hover table-success" *ngIf="isFound">
+        <caption></caption>
+        <thead class="thead-dark">
+            <tr>
+                <th scope="col">ID</th>
+                <th scope="col">Survey ID</th>
+                <th scope="col">Question Text</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <th id="hid">{{searchResponce.qId}}</th>
+                <td>{{searchResponce.survey.id}}</td>
+                <td>{{searchResponce.questionText}}</td>
+            </tr>
+        </tbody>
+    </table>
+    <button class="center text-light btn btn-sm btn-outline-secondary mt-3 px-5" (click)="toogleDisplay()">Show all
+        Questions</button>
+</div>
+<!-- All questions -->
+<div class="container text-light" *ngIf="displayQuestion">
+    <table class="table table-hover">
+        <caption></caption>
+        <thead class="thead-dark">
+            <tr>
+                <th scope="col">ID</th>
+                <th scope="col">Survey ID</th>
+                <th scope="col">Question Text</th>
+                <th scope="col">Modify Question</th>
+                <th scope="col">Remove Question</th>
+            </tr>
+        </thead>
+        <tbody *ngFor="let question of allQuestions; let index = index">
+            <tr
+                [ngClass]="{'table-danger': 0 === index % 3, 'table-success': 1 === index % 3, 'table-primary': 2 === index % 3}">
+                <th id="hid">{{question.qId}}</th>
+                <td>{{question.survey.id}}</td>
+                <td>{{question.questionText}}</td>
+                <td><button class="btn btn-sm btn-info" (click)="showForm2(question.qId)">Update</button></td>
+                <td><button class="btn btn-sm btn-danger" (click)="removeQuestion(question.qId)">Remove </button></td>
+            </tr>
+        </tbody>
+    </table>
+    <p class="mb-5 center">{{allQuestions.length}}&nbsp;questions showing.</p>
+</div>
+
+<!-- Getting add form -->
+<div class="container text-light" *ngIf="!isAdding && !isUpdating">
+    <button class="btn btn-primary px-5" (click)="showForm()">Add Question</button>
+</div>
+
+<!-- Adding Question -->
+
+<div style="height: 20em;" class="container text-light" *ngIf="isAdding">
+    <p>Enter the question text below:</p>
+
+    <form (ngSubmit)="addQuestion()" #userForm="ngForm">
+        <input type="text" class="form-group form-control mb-1" qId="name" required
+            [(ngModel)]="tempQuestion.questionText" name="questionText" #questionText="ngModel"
+            placeholder="questionText" autofocus [class.is-invalid]='questionText.invalid && questionText.touched'>
+        <div *ngIf="questionText.errors && (questionText.invalid && questionText.touched)">
+            <small class="text-danger" *ngIf='questionText.errors.required'> Question Text must not be empty</small>
+        </div>
+
+        <input type="text" class="form-group form-control mb-1" id="surveyId" required
+            [(ngModel)]="tempQuestion.surveyId" name="surveyId" #surveyId="ngModel" placeholder="survey Id" autofocus
+            [class.is-invalid]='surveyId.invalid && surveyId.touched'>
+        <div *ngIf="surveyId.errors && (surveyId.invalid && surveyId.touched)">
+            <small class="text-danger" *ngIf='surveyId.errors.required'> Survey Id must not be empty</small>
+        </div>
+
+
+        <button class="mt-4 btn btn-lg btn-primary" type="submit" [disabled]=" !userForm.form.valid">Add
+            Question</button>
+    </form>
+    <button class="center btn btn-sm btn-outline-secondary mt-3 px-5" (click)="toogleDisplay()">Show all
+        Question</button>
+</div>
+
+<!-- Updating Question -->
+<div style="height: 20em;" class="container text-light" *ngIf="isUpdating">
+    <p>Enter the data below:</p>
+
+    <form (ngSubmit)="updateQuestion()" #userForm="ngForm">
+
+        <input type="string" class="form-group form-control mb-1" questionText="name" required
+            [(ngModel)]="tempQuestion.questionText" name="questionText" #questionText="ngModel" placeholder="Question Text" autofocus
+            [class.is-invalid]='questionText.invalid && questionText.touched'>
+        <div *ngIf="questionText.errors && (questionText.invalid && questionText.touched)">
+            <small class="text-danger" *ngIf='questionText.errors.required'> Question Text must not be empty</small>
+        </div>
+
+        <button class="mt-4 btn btn-lg btn-primary" type="submit" [disabled]=" !userForm.form.valid">Update
+            Question</button>
+    </form>
+    <button class="center btn btn-sm btn-outline-secondary mt-3 px-5" (click)="toogleDisplay()">Show all
+        Question</button>
+</div>

@@ -1,0 +1,121 @@
+<div class="sidenav">
+    <div class=" login-main-text">
+        <br>
+        <h2>Online Survey Application<br> Login Page</h2>
+        <p>Login from here to access.</p>
+    </div>
+</div>
+<div class="main">
+    <!-- Show Selection -->
+    <div class="col-md-5 col-sm-12">
+        <div class="login-form" *ngIf="isSelecting">
+            <p class="display-4">Login as </p>
+            <div class="card" (click)="showSurveyorLogin()">
+                <div class="card-body">
+                    Surveyor
+                </div>
+            </div>
+            <div class="mt-4 card" (click)="showParticipantLogin()">
+                <div class="card-body">
+                    Participant
+                </div>
+            </div>
+        </div>
+
+        <!-- Show Surveyor Login-->
+        <div class="login-form" *ngIf="isloginSurveyor">
+            <p class="display-4">Surveyor Login</p>
+
+            <form (ngSubmit)="onSubmit()" #userForm="ngForm">
+                <input type="text" class="form-group form-control mb-1" id="username" required
+                    [(ngModel)]="credentials.userName" name="username" #username="ngModel" placeholder="Username"
+                    [class.is-invalid]='username.invalid && username.touched'>
+                <div *ngIf="username.errors && (username.invalid && username.touched)">
+                    <small class="text-danger" *ngIf='username.errors.required'> Username is required</small>
+                </div>
+                <input type="password" class="mt-4 form-group form-control mb-1" id="password" required
+                    [(ngModel)]="credentials.password" name="password" #password="ngModel" placeholder="Password"
+                    [class.is-invalid]='password.invalid && password.touched'>
+                <div *ngIf="password.errors && (password.invalid && password.touched)">
+                    <small class="text-danger" *ngIf='password.errors.required'> Password is required</small>
+                </div>
+                <p class="text-danger">{{message}}</p>
+                <button class="mt-4 btn btn-sm btn-primary" type="submit" [disabled]=" !userForm.form.valid">Log in
+                </button>
+            </form>
+            <button class="mt-4 btn btn-sm btn-secondary" type="button" (click)="showSelection()">Back</button>
+        </div>
+
+        <!-- Show Participant login -->
+        <div class="login-form" *ngIf="isloginParticipant">
+            <p class="display-4">Participant Login</p>
+
+            <form (ngSubmit)="onSubmitParticipant()" #userForm="ngForm">
+                <input type="text" class="form-group form-control mb-1" id="username" required
+                    [(ngModel)]="credentials.userName" name="username" #username="ngModel" placeholder="Username"
+                    [class.is-invalid]='username.invalid && username.touched'>
+                <div *ngIf="username.errors && (username.invalid && username.touched)">
+                    <small class="text-danger" *ngIf='username.errors.required'> Username is required</small>
+                </div>
+                <input type="password" class="mt-4 form-group form-control mb-1" id="password" required
+                    [(ngModel)]="credentials.password" name="password" #password="ngModel" placeholder="Password"
+                    [class.is-invalid]='password.invalid && password.touched'>
+                <div *ngIf="password.errors && (password.invalid && password.touched)">
+                    <small class="text-danger" *ngIf='password.errors.required'> Password is required</small>
+                </div>
+                <p class="text-danger">{{message}}</p>
+                <button class="mt-4 btn btn-sm btn-primary" type="submit" [disabled]=" !userForm.form.valid">Log in
+                </button>
+            </form>
+            <button class="mt-4 btn btn-sm btn-secondary" type="button" (click)="showSelection()">Back</button>
+        </div>
+
+        <!-- Show Registration link -->
+        <br>
+        <!-- <div *ngIf="isSelecting">
+            <a class="mt-4 mx-2  text-primary" type="button" (click)="showRegForm()"> Not a user yet?? Click here to
+                register
+            </a>
+        </div> -->
+
+        <!-- Show Registration form -->
+        <div class="login-form" *ngIf="isRegistration">
+            <p class="display-4">Registration</p>
+            <br>
+            <br>
+            <form (ngSubmit)="onSubmitReg()" #userForm="ngForm">
+                <input type="text" class="form-group form-control mb-1" id="username" required
+                    [(ngModel)]="userName" name="username" #username="ngModel" placeholder="Username"
+                    [class.is-invalid]='username.invalid && username.touched'>
+                <div *ngIf="username.errors && (username.invalid && username.touched)">
+                    <small class="text-danger" *ngIf='username.errors.required'> Username is required</small>
+                </div>
+                <!-- <input type="password" class="mt-4 form-group form-control mb-1" id="password" required
+                    [(ngModel)]="pass" name="password" #pass="ngModel" placeholder="Password"
+                    [class.is-invalid]='pass.invalid && password.touched'>
+                <div *ngIf="pass.errors && (pass.invalid && password.touched)">
+                    <small class="text-danger" *ngIf='pass.errors.required'> Password is required</small>
+                </div> 
+                <input type="password" class="mt-4 form-group form-control mb-1" id="cpassword" required
+                    [(ngModel)]="cpassword" name="cpassword" #cpassword="ngModel"
+                    placeholder="Confirm Password" [class.is-invalid]='cpassword.invalid && cpassword.touched'>
+                <div *ngIf="cpassword.errors && (cpassword.invalid && cpassword.touched)">
+                    <small class="text-danger" *ngIf='password.errors.required'> Password is required</small>
+                </div> -->
+                <label>Role:</label>
+                <input class="ml-5 mr-1 mt-4" type="radio" id="vds" name="role" [(ngModel)]="roleString"
+                    value="surveyor" required>
+                <label for="Dissatisfied">Surveyor</label>
+                <input class="ml-5 mr-1" type="radio" id="ds" name="role" [(ngModel)]="roleString"
+                    value="participant">
+                <label for="Very Dissatisfied">Participant</label>
+                <br>
+                <button class="center mt-4 btn btn-sm btn-primary" type="submit"
+                    [disabled]=" !userForm.form.valid">Register
+                </button>
+            </form>
+            <button class="mt-4 btn btn-sm btn-secondary" type="button" (click)="showSelection()">Back</button>
+        </div>
+
+    </div>
+</div>

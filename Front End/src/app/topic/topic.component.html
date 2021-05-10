@@ -1,0 +1,131 @@
+<app-header></app-header>
+<!-- Heading -->
+<div>
+    <p class="display-2 heading">Topics </p>
+</div>
+<div class="container text-light">
+    <h1>{{heading}}</h1>
+</div>
+<hr />
+<!-- Search Bar -->
+<div class="pb-4 container">
+    <form class="form-inline">
+        <input class="shadow form-control mr-sm-2 ml-auto" type="search" name="search" placeholder="Search"
+            aria-label="Search" [(ngModel)]="searchKey">
+        <button class="shadow btn btn-outline-success my-4 my-sm-0" type="submit"
+            (click)="searchTopic(searchKey)">Search</button>
+    </form>
+</div>
+<!-- Optional search results -->
+<div style="height: 22em" class="container text-light" *ngIf="isSearched">
+    <p>{{searchResult}}</p>
+    <table class="table table-hover table-success" *ngIf="isFound">
+        <caption></caption>
+        <thead class="thead-dark">
+            <tr>
+                <th scope="col">ID</th>
+                <th scope="col">Name</th>
+                <th scope="col">Description</th>
+                <th scope="col">Created by</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <th id="hid">{{searchResponce.id}}</th>
+                <td>{{searchResponce.name}}</td>
+                <td>{{searchResponce.description}}</td>
+                <td>{{searchResponce.surveyor.firstName}}&nbsp;{{searchResponce.surveyor.lastName}}</td>
+            </tr>
+        </tbody>
+    </table>
+    <button class="center text-light btn btn-sm btn-outline-secondary mt-3 px-5" (click)="toogleDisplay()">Show all
+        topic</button>
+</div>
+<!-- All topics -->
+<div class="container text-light" *ngIf="displayTopic">
+    <table class="table table-hover">
+        <caption></caption>
+        <thead class="thead-dark">
+            <tr>
+                <th scope="col">ID</th>
+                <th scope="col">Name</th>
+                <th scope="col">Description</th>
+                <th scope="col">Created by</th>
+                <th scope="col">Actions</th>
+            </tr>
+        </thead>
+        <tbody *ngFor="let topic of allTopics; let index = index">
+            <tr
+                [ngClass]="{'table-danger': 0 === index % 3, 'table-success': 1 === index % 3, 'table-primary': 2 === index % 3}">
+                <th id="hid">{{topic.id}}</th>
+                <td>{{topic.name}}</td>
+                <td>{{topic.description}}</td>
+                <td>{{topic.surveyor.firstName}}&nbsp;{{topic.surveyor.lastName}}</td>
+                <td><button class="btn btn-sm btn-secondary" (click)="showUpdateForm(topic.id)">Edit</button>
+                    <button class="mx-3 btn btn-sm btn-danger" (click)="removeTopic(topic.id)">Remove</button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <p class="mb-5 center">{{allTopics.length}}&nbsp;topics showing.</p>
+</div>
+<!-- Getting add form -->
+<div class="container text-light" *ngIf="!isAdding && !isUpdating">
+    <button class="btn btn-primary px-5" (click)="showAddForm()">Add Topic</button>
+</div>
+<!-- Adding Topic -->
+<div style="height: 25em" class="container text-light" *ngIf="isAdding">
+    <p>Enter the data below:</p>
+
+    <form (ngSubmit)="addTopic()" #userForm="ngForm">
+        <input type="text" class="form-group form-control mb-1" id="name" required [(ngModel)]="tempTopic.name"
+            name="name" #name="ngModel" placeholder="Topic Name" autofocus
+            [class.is-invalid]='name.invalid && name.touched' pattern="[a-zA-Z]{3,}">
+        <div *ngIf="name.errors && (name.invalid && name.touched)">
+            <small class="text-danger" *ngIf='name.errors.required'> Topic Name must NOT be empty</small>
+            <small class="text-danger" *ngIf='name.errors.pattern'> Topic Name must be alphabets and grather then 2
+                characters long </small>
+        </div>
+
+        <input type="text" class="mt-4 form-group form-control mb-1" id="description" required
+            [(ngModel)]="tempTopic.description" name="description" #description="ngModel" placeholder="Topic Description"
+            autofocus [class.is-invalid]='description.invalid && description.touched'>
+        <div *ngIf="description.errors && (description.invalid && description.touched)">
+            <small class="text-danger" *ngIf='description.errors.required'> Topic Description must NOT be empty</small>
+        </div>
+
+        <input type="text" class="mt-4 form-group form-control mb-1" id="surveyor" required
+            [(ngModel)]="tempTopic.surveyorId" name="surveyor" #surveyor="ngModel" placeholder="Surveyor User Name" autofocus
+            [class.is-invalid]='surveyor.invalid && surveyor.touched'>
+        <div *ngIf="surveyor.errors && (surveyor.invalid && surveyor.touched)">
+            <small class="text-danger" *ngIf='name.errors.required'> Surveyor user name must NOT be empty</small>
+        </div>
+
+        <button type="submit" class="mt-4 btn btn-lg btn-primary" type="submit" [disabled]=" !userForm.form.valid">Add
+            Topic</button>
+    </form>
+    <button class="center text-light btn btn-sm btn-outline-secondary mt-3 px-5" (click)="toogleDisplay()">Show all topic</button>
+</div>
+
+<!-- Updating Topic -->
+<div style="height: 25em" class="container text-light" *ngIf="isUpdating">
+    <p>Enter the data below:</p>
+    <form (ngSubmit)="updateTopic()" #userForm="ngForm">
+        <input type="text" class="form-group form-control mb-1" id="name" required [(ngModel)]="tempTopic.name"
+            name="name" #name="ngModel" placeholder="New Topic Name" autofocus [class.is-invalid]='name.invalid && name.touched' pattern="[a-zA-Z]{3,}">
+            <div *ngIf="name.errors && (name.invalid && name.touched)">
+                <small class="text-danger" *ngIf='name.errors.required'> Topic Name must NOT be empty</small>
+                <small class="text-danger" *ngIf='name.errors.pattern'> Topic Name must be alphabets and grather then 2
+                    characters long </small>
+            </div>
+        <input type="text" class="mt-4 form-group form-control mb-1" id="description" required
+            [(ngModel)]="tempTopic.description" name="description" #description="ngModel" placeholder="New Topic Description"
+            autofocus [class.is-invalid]='description.invalid && description.touched'>
+            <div *ngIf="description.errors && (description.invalid && description.touched)">
+                <small class="text-danger" *ngIf='description.errors.required'> Topic Description must NOT be empty</small>
+            </div>
+        <button class="mt-4 btn btn-lg btn-primary" type="submit" [disabled]=" !userForm.form.valid">Update
+            Topic</button>
+    </form>
+    <button class="center text-light btn btn-sm btn-outline-secondary mt-3 px-5" (click)="toogleDisplay()">Show all topic</button>
+</div>

@@ -1,0 +1,102 @@
+<app-participantheader></app-participantheader>
+
+<div>
+    <p class="display-2 heading"></p>
+</div>
+<div class="container text-light">
+    <h1 align="center">Welcome </h1>
+</div>
+<hr />
+<div style="height: 24em;" class="container">
+    <div class="container" *ngIf="!showSurvey">
+        <!-- <input type="text" >
+        <button class="my-5 center btn btn-lg btn-primary" (click)="startSurvey()">Press to take Survey</button> -->
+        <form (ngSubmit)="startSurvey()" #userForm="ngForm">
+        <input type="text" class="form-group form-control mb-4" id="pid" required [(ngModel)]="participantId"
+            name="pid" #pid="ngModel" placeholder="Participant ID" [class.is-invalid]='pid.invalid && pid.touched' pattern="[0-9]{2,}">
+            <div *ngIf="pid.errors && (pid.invalid && pid.touched)">
+                <small class="text-danger" *ngIf='pid.errors.required'> Participant id is required</small>
+                <small class="text-danger" *ngIf='pid.errors.pattern'> Invalid Participant ID</small>
+            </div>
+        <button class="mt-4 center btn btn-lg btn-primary" type="submit" [disabled]=" !userForm.form.valid">Start Survey</button>
+        </form>
+    </div>
+    <!-- <div class="container" *ngIf="true">
+        <table class="table table-hover">
+            <thead class="thead-dark">
+                <tr>
+
+                </tr>
+            </thead>
+            <tbody *ngFor="let question of allQuestions; let index = index">
+                <tr
+                    [ngClass]="{'table-danger': 0 === index % 3, 'table-success': 1 === index % 3, 'table-primary': 2 === index % 3}">
+                    <td>{{question.questionText}}
+                        <br/>
+                        <br/>
+                        <input type="radio" id="vs" name="feedback" value="Very satisfied">
+                        <label for="Very satisfied">Very satisfied</label><br>
+
+                        <input type="radio" id="s" name="feedback" value="Satisfied">
+                        <label for="Satisfied">Satisfied</label><br>
+
+                        <input type="radio" id="ds" name="feedback" value="Very Dissatisfied">
+                        <label for="Very Dissatisfied">Very Dissatisfied</label><br>
+
+                        <input type="radio" id="vds" name="feedback" value="Dissatisfied">
+                        <label for="Dissatisfied">Dissatisfied</label>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div> -->
+    <div style="height: 9em;" class="container question" *ngIf="showSurvey">
+        <form class="text-center" (ngSubmit)="onSubmit()" #userForm="ngForm">
+            <p class="pt-3 text-center">{{tempQuestion.questionText}}</p>
+            <p class="text-muted small">(10 being the higest and 1 bring the lowest)</p>
+            
+            <!-- <input type="radio" id="vs" name="feedback" [(ngModel)]="answer" value="Very satisfied" required>
+            <label for="Very satisfied">Very satisfied</label><br>
+
+            <input type="radio" id="s" name="feedback" [(ngModel)]="answer" value="Satisfied">
+            <label for="Satisfied">Satisfied</label><br>
+
+            <input type="radio" id="vds" name="feedback" [(ngModel)]="answer" value="Dissatisfied">
+            <label for="Dissatisfied">Dissatisfied</label><br>
+
+            <input type="radio" id="ds" name="feedback" [(ngModel)]="answer" value="Very Dissatisfied">
+            <label for="Very Dissatisfied">Very Dissatisfied</label>
+            <br> -->
+
+            <!-- ************************************************************************* -->
+
+            <input type="radio" id="ds" name="feedback" [(ngModel)]="answer" value="vd1" required>
+            <label class="mr-3 ml-1 text-danger" for="Very Dissatisfied">1</label>
+            <input type="radio" id="ds" name="feedback" [(ngModel)]="answer" value="vd2">
+            <label class="mr-3 ml-1 text-danger" for="Very Dissatisfied">2</label>
+            
+            <input type="radio" id="vds" name="feedback" [(ngModel)]="answer" value="d3">
+            <label class="mr-3 ml-1 text-warning" for="Dissatisfied">3</label>
+            <input type="radio" id="vds" name="feedback" [(ngModel)]="answer" value="d4">
+            <label class="mr-3 ml-1 text-warning" for="Dissatisfied">4</label>
+            <input type="radio" id="vds" name="feedback" [(ngModel)]="answer" value="d5">
+            <label class="mr-3 ml-1 text-warning" for="Dissatisfied">5</label>
+
+            <input type="radio" id="s" name="feedback" [(ngModel)]="answer" value="s6">
+            <label class="mr-3 ml-1 text-info" for="Satisfied">6</label>
+            <input type="radio" id="s" name="feedback" [(ngModel)]="answer" value="s7">
+            <label class="mr-3 ml-1 text-info" for="Satisfied">7</label>
+            <input type="radio" id="s" name="feedback" [(ngModel)]="answer" value="s8">
+            <label class="mr-3 ml-1 text-info" for="Satisfied">8</label>
+
+            <input type="radio" id="vs" name="feedback" [(ngModel)]="answer" value="vs9" >
+            <label class="mr-3 ml-1 text-success" for="Very satisfied">9</label>
+            <input type="radio" id="vs" name="feedback" [(ngModel)]="answer" value="vs10" >
+            <label class="mr-3 ml-1 text-success" for="Very satisfied">10</label>
+            <br> 
+            <button class="center mt-5 mb-5 btn btn-lg btn-primary" type="submit" [disabled]=" !userForm.form.valid">
+                Submit</button>
+        </form>
+        <button class="mt-5 mb-5 btn btn-sm btn-secondary" type="button" (click)="showHome()"> back</button>
+    </div>
+</div>

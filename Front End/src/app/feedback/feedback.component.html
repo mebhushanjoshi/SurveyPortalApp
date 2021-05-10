@@ -1,0 +1,80 @@
+<app-header></app-header>
+<div>
+    <!-- Heading -->
+    <div>
+        <p class="display-2 heading">Feedbacks</p>
+    </div>
+    <div class="container text-light">
+        <h1>{{heading}}</h1>
+        <hr />
+    </div>
+    <!-- Search Bar -->
+    <div class="pb-4 container">
+        <form class="form-inline">
+            <input class="shadow form-control mr-sm-2 ml-auto" type="search" name="search" placeholder="Search"
+                aria-label="Search" [(ngModel)]="searchKey">
+            <button class="shadow btn btn-outline-success my-4 my-sm-0" type="submit"
+                (click)="searchFeedback(searchKey)">Search</button>
+        </form>
+    </div>
+    <!-- Optional search results -->
+    <div style="height: 20em;" class="container text-light" *ngIf="isSearched">
+        
+        <p>{{searchResult}}</p>
+        <table class="table table-hover table-success" *ngIf="isFound">
+            <caption></caption>
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">Survey ID</th>
+                    <th scope="col">Question ID</th>
+                    <th scope="col">Question</th>
+                    <th scope="col">Participant ID</th>
+                    <th scope="col">Response</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <th id="hid">{{searchResponce.id}}</th>
+                    <td>{{searchResponce.question.survey.id}}</td>
+                    <td>{{searchResponce.question.qId}}</td>
+                    <td>{{searchResponce.question.questionText}}</td>
+                    <!-- <td>[{{searchResponce.participant.id}}].{{searchResponce.participant.firstName}}&nbsp;{{searchResponce.participant.lastName}}</td> -->
+                    <td>{{searchResponce.participant.id}}</td>
+                    <td>{{searchResponce.chosenOption}}</td>
+                </tr>
+            </tbody>
+        </table>
+        <button class="center text-light btn btn-sm btn-outline-secondary mt-3 px-5" (click)="toogleDisplay()">Show all
+            feedbacks</button>
+    </div>
+    <!-- All Feedbacks -->
+    <div class="container text-light" *ngIf="displayFeedback">
+        <table class="table table-hover">
+            <caption></caption>
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">Survey ID</th>
+                    <th scope="col">Question ID</th>
+                    <th scope="col">Question</th>
+                    <th scope="col">Participant ID</th>
+                    <th scope="col">Response</th>
+                </tr>
+            </thead>
+            <tbody *ngFor="let feedback of allFeedbacks; let index = index">
+                <tr
+                    [ngClass]="{'table-danger': 0 === index % 3, 'table-success': 1 === index % 3, 'table-primary': 2 === index % 3}">
+                    <th id="hid">{{feedback.id}}</th>
+                    <td>{{feedback.question.survey.id}}</td>
+                    <td>{{feedback.question.qId}}</td>
+                    <td>{{feedback.question.questionText}}</td>
+                    <!-- <td>[{{feedback.participant.id}}].{{feedback.participant.firstName}}&nbsp;{{feedback.participant.lastName}}</td> -->
+                    <td>{{feedback.participant.id}}</td>
+                    <td>{{feedback.chosenOption}}</td>
+                </tr>
+            </tbody>
+        </table>
+        <p class="mb-5 center">{{allFeedbacks.length}}&nbsp;feedbacks showing.</p>
+    </div>
+</div>

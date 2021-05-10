@@ -1,0 +1,26 @@
+<nav class="navbar sticky-top navbar-expand-lg navbar-dark bg-dark">
+  <div class="container-fluid">
+    <a class="navbar-brand ">Survey Portal App</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+      aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <!-- <a class="navbar-brand ">something</a> -->
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav ml-auto">
+        <li class="nav-item">
+          <a [routerLink]="['/participanthome']" class="nav-link active">Home</a>
+        </li>
+        <li class="nav-item">
+          <a [routerLink]="['/takeSurvey']" class="nav-link" href="#">Take Survey</a>
+        </li>
+        <li class="nav-item">
+          <a [routerLink]="['/participantabout']" class="nav-link" href="#">About</a>
+        </li>
+        <li class="ml-3 nav-item">
+          <a class="text-primary text-ul nav-link" (click)="logoutUser()">Log out</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>

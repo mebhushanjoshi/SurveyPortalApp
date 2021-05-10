@@ -1,0 +1,174 @@
+<app-header></app-header>
+<!-- Heading -->
+<div>
+    <p class="display-2 heading">Surveyors </p>
+</div>
+<div class="container text-light">
+    <h1>{{heading}}</h1>
+</div>
+<hr />
+<!-- Search Bar -->
+<div class="pb-4 container">
+    <form class="form-inline">
+        <input class="shadow form-control mr-sm-2 ml-auto" type="search" name="search" placeholder="Search"
+            aria-label="Search" [(ngModel)]="searchKey">
+        <button class="shadow btn btn-outline-success my-4 my-sm-0" type="submit"
+            (click)="searchTopic(searchKey)">Search</button>
+    </form>
+</div>
+<!-- Optional search results -->
+<div style="height: 18em" class="container text-light" *ngIf="isSearched">
+    <p>{{searchResult}}</p>
+    <table class="table table-hover table-success" *ngIf="isFound">
+        <caption></caption>
+        <thead class="thead-dark">
+            <tr>
+                <th scope="col">ID</th>
+                <th scope="col">First name</th>
+                <th scope="col">Last name</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <th id="hid">{{searchResponce.id}}</th>
+                <td>{{searchResponce.firstName}}</td>
+                <td>{{searchResponce.lastName}}</td>
+            </tr>
+        </tbody>
+    </table>
+    <button class="center text-primary btn btn-sm btn-outline-secondary mt-3 px-5" (click)="toogleDisplay()">Show all
+        Surveyors</button>
+</div>
+<!-- All surveyor -->
+<div class="container text-light" *ngIf="displayTopic">
+    <table class="table table-hover">
+        <caption></caption>
+        <thead class="thead-dark">
+            <tr>
+                <th scope="col">ID</th>
+                <th scope="col">First name</th>
+                <th scope="col">Last name</th>
+                <th scope="col">Modify</th>
+                <th scope="col">Delete</th>
+            </tr>
+        </thead>
+        <tbody *ngFor="let surveyor of allSurveyors; let index = index">
+            <tr
+                [ngClass]="{'table-danger': 0 === index % 3, 'table-success': 1 === index % 3, 'table-primary': 2 === index % 3}">
+                <th id="hid">{{surveyor.id}}</th>
+                <td>{{surveyor.firstName}}</td>
+                <td>{{surveyor.lastName}}</td>
+                <td>
+                    <button class="btn btn-secondary btn-sm text-light" *ngIf="!isAdding && !isUpdating"
+                        (click)="showUpdateForm(surveyor.id)">Update</button>
+                </td>
+                <td><button class="mx-3 btn btn-sm btn-danger" (click)="removeSurveyor(surveyor.id)">Remove</button>
+                </td>
+            </tr>
+        </tbody>
+
+    </table>
+    <p class="text-light text-center display-5">{{allSurveyors.length}}- Surveyor Showing...</p>
+
+
+</div>
+<!-- Getting add form -->
+<div class="container text-light" *ngIf="!isAdding && !isUpdating">
+    <button class="btn btn-primary  " (click)="showAddForm()">Add Surveyor</button>
+</div>
+
+<!-- Adding surveyor -->
+<div style="height: 25em" class="container text-light" *ngIf="isAdding">
+    <p>Enter the data below:</p>
+
+    <form (ngSubmit)="addSurveyor()" #userForm="ngForm">
+
+        <input type="text" class="form-group form-control mb-1" id="name" required [(ngModel)]="tempSurveyor.firstName"
+            name="name" #finame="ngModel" placeholder="First Name" autofocus
+            [class.is-invalid]='finame.invalid && finame.touched' pattern="[a-zA-Z]{3,10}">
+        <div *ngIf="finame.errors && (finame.invalid && finame.touched)">
+            <small class="text-danger" *ngIf='finame.errors.required'>*Name is Required</small>
+            <small class="text-danger" *ngIf='finame.errors.pattern'>*Enter Valid Name(it shoud not be number) Format
+                (it shoud not be less than 3 characters and max limit is 10)</small>
+        </div>
+
+
+
+        <input type="text" class="mt-4 form-group form-control mb-1" id="description" required
+            [(ngModel)]="tempSurveyor.lastName" name="description" #laname="ngModel" placeholder="Last Name" autofocus
+            pattern="[a-zA-Z]{3,10}" [class.is-invalid]='laname.invalid && laname.touched'>
+        <div *ngIf="laname.errors && (laname.invalid && laname.touched)">
+            <small class="text-danger" *ngIf='laname.errors.required'>*Name is Required</small>
+            <small class="text-danger" *ngIf='laname.errors.pattern'>*Enter Valid Name(it should not be number) Format
+                (it shoud not be less than 3 characters and max limit is 10)</small>
+        </div>
+
+
+
+
+        <input type="text" class="mt-4 form-group form-control mb-1" id="surveyor" required
+            [(ngModel)]="tempSurveyor.username" name="surveyor" #usname="ngModel" placeholder="Username" autofocus
+            [class.is-invalid]='usname.invalid && usname.touched' pattern="[a-zA-Z_]{3,10}">
+        <div *ngIf="usname.errors && (usname.invalid && usname.touched)">
+            <small class="text-danger" *ngIf='usname.errors.required'>*Username is Required</small>
+            <small class="text-danger" *ngIf='usname.errors.pattern'>*Enter Valid Username(it should not be number),
+                Format (it shoud not be less than 3 characters and max limit is 10)</small>
+        </div>
+
+
+        <button type="submit" class="mt-4 btn btn-lg btn-primary" type="submit" [disabled]=" userForm.form.invalid">Add
+            Surveyor</button>
+    </form>
+    <button class="center  text-primary btn btn-sm btn-outline-secondary mt-3 px-5" (click)="toogleDisplay()">Show all
+        Surveyor</button>
+</div>
+
+<!-- Updating surveyor -->
+<div style="height: 25em;" class="container text-light" *ngIf="isUpdating">
+    <p>Enter the data below:</p>
+    <form (ngSubmit)="updateSurveyor()" #userForm="ngForm">
+        <!-- <input type="number" class="form-group form-control " id="name" required [(ngModel)]="tempSurveyor.id"
+            name="sId" #idname="ngModel" placeholder="Surveyor Id" autofocus [class.is-invalid]='idname.invalid && idname.touched'>
+            <div *ngIf="idname.invalid && idname.touched">
+
+                <small class="text-danger">*Id is Required</small>
+            </div> -->
+
+
+        <input type="text" class="form-group form-control mb-1" id="name" required [(ngModel)]="tempSurveyor.firstName"
+            name="name" #finame="ngModel" placeholder="First Name" autofocus
+            [class.is-invalid]='finame.invalid && finame.touched' pattern="[a-zA-Z]{3,10}">
+        <div *ngIf="finame.errors && (finame.invalid && finame.touched)">
+            <small class="text-danger" *ngIf='finame.errors.required'>*Name is Required</small>
+            <small class="text-danger" *ngIf='finame.errors.pattern'>*Enter Valid Name(it shoud not be number) Format
+                (it shoud not be less than 3 characters and max limit is 10)</small>
+        </div>
+
+
+        <input type="text" class="mt-4 form-group form-control mb-1" id="description" required
+            [(ngModel)]="tempSurveyor.lastName" name="description" #laname="ngModel" placeholder="Last Name" autofocus
+            pattern="[a-zA-Z]{3,10}" [class.is-invalid]='laname.invalid && laname.touched'>
+        <div *ngIf="laname.errors && (laname.invalid && laname.touched)">
+            <small class="text-danger" *ngIf='laname.errors.required'>*Name is Required</small>
+            <small class="text-danger" *ngIf='laname.errors.pattern'>*Enter Valid Name(it should not be number) Format
+                (it shoud not be less than 3 characters and max limit is 10)</small>
+        </div>
+
+
+        <input type="text" class="mt-4 form-group form-control mb-1" id="surveyor" required
+            [(ngModel)]="tempSurveyor.username" name="surveyor" #usname="ngModel" placeholder="Username" autofocus
+            [class.is-invalid]='usname.invalid && usname.touched' pattern="[a-zA-Z_]{3,10}">
+        <div *ngIf="usname.errors && (usname.invalid && usname.touched)">
+            <small class="text-danger" *ngIf='usname.errors.required'>*Username is Required</small>
+            <small class="text-danger" *ngIf='usname.errors.pattern'>*Enter Valid Username(it should not be number),
+                Format (it shoud not be less than 3 characters and max limit is 10)</small>
+        </div>
+
+
+
+        <button class="mt-4 btn btn-lg btn-primary" type="submit" [disabled]=" userForm.form.invalid">Update
+            Surveyor</button>
+    </form>
+    <button class="center btn btn-sm  text-primary btn-outline-secondary mt-3 px-5" (click)="toogleDisplay()">Show all
+        Surveyor</button>
+</div>

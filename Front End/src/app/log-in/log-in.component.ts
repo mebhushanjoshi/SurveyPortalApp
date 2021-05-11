@@ -1,5 +1,4 @@
 import { Router } from '@angular/router';
-import { UserRoles } from './../models/UserRoles';
 import { LoginService } from './../services/login.service';
 import { Component, OnInit } from '@angular/core';
 
@@ -14,45 +13,44 @@ export class LogInComponent implements OnInit {
     userName: '',
     password: '',
   }
-  userName: string;
-  pass;
-  role: UserRoles;
-  cpassword: string;
-  roleString: string;
   isloginSurveyor: boolean = false;
   isloginParticipant: boolean = false;
   isRegistration: boolean = false;
   isSelecting: boolean = true;
   message: string;
-
+  /**
+   * Constructor injecting LOginSer and Router classes
+   * @param loginService needed to use login service methods
+   * @param router needed for routing
+   */
   constructor(private loginService: LoginService, private router: Router) { }
-
+  /**
+   * 
+   */
   ngOnInit(): void {
   }
-
+  /**
+   * This method get a valid token for the Surveyor and help to loggin or deny the request.
+   */
   onSubmit() {
-    //console.log("in onsubmit" + this.credentials.userName + " " + this.credentials.password);
     this.loginService.logout();
-    this.message="";
+    this.message = "";
     if ((this.credentials.userName != null && this.credentials.password != null) && (this.credentials.userName != '' && this.credentials.password != '')) {
-      // console.log("save to server");
-
       this.loginService.generateToken(this.credentials).subscribe(
         (response: any) => {
-          //console.log(response.token);
           this.loginService.loginUser(response.token);
-          if(this.loginService.getToken() != 'thisIsNotTheValidToken'){
+          if (this.loginService.getToken() != 'thisIsNotTheValidToken') {
             this.router.navigate(['/home']);
           }
-          else{
+          else {
             window.alert("Invalid username or password");
-            this.message="Invalid username or password";
+            this.message = "Invalid username or password";
             this.loginService.logout();
           }
         },
         error => {
           window.alert("Invalid username or password");
-          this.message="Invalid username or password";
+          this.message = "Invalid username or password";
         }
       )
     }
@@ -60,30 +58,27 @@ export class LogInComponent implements OnInit {
       console.log("Empty Form");
     }
   }
-  onSubmitParticipant(){
-
-    //console.log("in onsubmit2" + this.credentials.userName + " " + this.credentials.password);
+  /**
+   * This method get a valid token for the Participant and help to loggin or deny the request.
+   */
+  onSubmitParticipant() {
     this.loginService.logout();
     if ((this.credentials.userName != null && this.credentials.password != null) && (this.credentials.userName != '' && this.credentials.password != '')) {
-      //console.log("save to server");
-
-      this.loginService.generateToken(this.credentials).subscribe(
+        this.loginService.generateToken(this.credentials).subscribe(
         (response: any) => {
-          //console.log(response.token);
           this.loginService.loginUser(response.token);
-            // window.location.href = "/participanthome";
-            if(this.loginService.getToken() != 'thisIsNotTheValidToken'){
-              this.router.navigate(['/participanthome']);
-            }
-            else{
-              window.alert("Invalid username or password");
-              this.message="Invalid username or password";
-              this.loginService.logout();
-            }
+          if (this.loginService.getToken() != 'thisIsNotTheValidToken') {
+            this.router.navigate(['/participanthome']);
+          }
+          else {
+            window.alert("Invalid username or password");
+            this.message = "Invalid username or password";
+            this.loginService.logout();
+          }
         },
         error => {
           window.alert("Invalid username or password");
-          this.message="Invalid username or password";
+          this.message = "Invalid username or password";
         }
       )
     }
@@ -91,34 +86,40 @@ export class LogInComponent implements OnInit {
       console.log("Empty Form");
     }
   }
-
-  onSubmitReg(){
-
-  }
-
-  showRegForm() {
-    this.isloginSurveyor = false;
-    this.isloginParticipant = false;
-    this.isRegistration = true;
-    this.isSelecting = false;
-  }
-  showSurveyorLogin(){
+  /**
+   * Show the login form for Surveyor
+   */
+  showSurveyorLogin() {
     this.isloginSurveyor = true;
     this.isloginParticipant = false;
     this.isRegistration = false;
     this.isSelecting = false;
   }
-  showParticipantLogin(){
+  /**
+   * Show the login form for Participant
+   */
+  showParticipantLogin() {
     this.isloginSurveyor = false;
     this.isloginParticipant = true;
     this.isRegistration = false;
     this.isSelecting = false;
   }
-
-  showSelection(){
+  /**
+   * Show the login foem for Surveyor
+   */
+  showSelection() {
     this.isloginSurveyor = false;
     this.isloginParticipant = false;
     this.isRegistration = false;
     this.isSelecting = true;
+  }
+  /**
+   * Show a Selection page for login
+   */
+  showRegForm() {
+    this.isloginSurveyor = false;
+    this.isloginParticipant = false;
+    this.isRegistration = true;
+    this.isSelecting = false;
   }
 }

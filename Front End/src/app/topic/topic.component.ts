@@ -32,27 +32,62 @@ export class TopicComponent implements OnInit {
   constructor(private topic: TopicDataService) { }
 
   /**
-   * This method will search a perticular topic and show it on the template.
-   * @param SearchKey The key for searching a topic
+   * Add a new topic into the databse via springboot app 
+   * with the data provided in add topic form.
    */
-  searchTopic(SearchKey: number | string): void {
-    this.searchResponce = undefined;
-    this.isFound = false;
-    this.searchResult = "No match found!!";
-    this.heading = "Search results";
-    this.isSearched = true;
-    this.displayTopic = false;
-    this.isUpdating = false;
-    this.isAdding = false;
+  addTopic(): void {
+    this.topic.addTopic(this.tempTopic.name, this.tempTopic.description, this.tempTopic.surveyorId).subscribe(
+      response => {
+        window.alert(`Hooray!! A new topic added successfully.`);
+        this.ngOnInit();
+      },
+      error => window.alert(`Topic addition failed. Either topic name already exists or invalid surveyor user ID`)
+    );
+    this.toogleDisplay();
+  }
+  /**
+   * Remove a perticular topic of which id is provided from the data via springboot app.
+   * NOTE: It's not a DOM deletion, the topic data will be lost permanently.
+   * @param id Id of the topic to be deleted from the database.
+   */
+  removeTopic(id: number): void {
+    if (window.confirm(`Sure you want to delete topic with id: ${id}??`)) {
+      this.topic.removeTopic(id).subscribe();
+      window.alert(`Topic with id: ${id} deleted successfully.`);
+      this.ngOnInit();
+    }
+  }
+  /**
+   * Modify/Update an existing topic into the databse via springboot app 
+   * with the data provided in update topic form.
+   */
+  updateTopic() {
     for (let topic of this.allTopics) {
-      if (SearchKey == topic.id || SearchKey == topic.name) {
-        this.searchResponce = topic;
+      if (this.tempTopic.id == topic.id && this.tempTopic.name != topic.name) {
+        this.topic.updateTopicName(this.tempTopic.id, this.tempTopic.name).subscribe(
+          response => {
+            window.alert(`Yeahhhh!! Topic with id:${this.tempTopic.id} updateded successfully.`);
+            this.topic.updateTopicDecscription(this.tempTopic.id, this.tempTopic.description).subscribe();
+            this.ngOnInit();
+          },
+          error => {
+            window.alert(`The topic name you entered already exist.`);
+            this.ngOnInit();
+          }
+        );
       }
     }
-    if (typeof this.searchResponce != 'undefined') {
-      this.searchResult = "Match found!!";
-      this.isFound = true;
-    }
+    this.topic.updateTopicDecscription(this.tempTopic.id, this.tempTopic.description).subscribe();
+    this.toogleDisplay();
+    this.ngOnInit();
+  }
+  /**
+   * A method from OnInit interface which will run at the time of initialization
+   * of this class.
+   * It fetch all the topic recored from the database via springboot app.
+   */
+  ngOnInit(): void {
+    this.topic.getAllTopics().subscribe(data => this.allTopics = data);
   }
   /**
    * Decides when to show all the topic in the page.
@@ -89,60 +124,26 @@ export class TopicComponent implements OnInit {
     this.tempTopic.id = id;
   }
   /**
-   * Add a new topic into the databse via springboot app 
-   * with the data provided in add topic form.
+   * This method will search a perticular topic and show it on the template.
+   * @param SearchKey The key for searching a topic
    */
-  addTopic(): void {
-    // let size: number = this.allTopics.length;
-    this.topic.addTopic(this.tempTopic.name, this.tempTopic.description, this.tempTopic.surveyorId).subscribe(
-      response => {
-        window.alert(`Hooray!! A new topic added successfully.`);
-        this.ngOnInit();
-      },
-      error => window.alert(`Topic addition failed. Either topic name already exists or invalid surveyor user ID`)
-    );
-    this.toogleDisplay();
-  }
-  /**
-   * Remove a perticular topic of which id is provided from the data via springboot app.
-   * NOTE: It's not a DOM deletion, the topic data will be lost permanently.
-   * @param id Id of the topic to be deleted from the database.
-   */
-  removeTopic(id: number): void {
-    if (window.confirm(`Sure you want to delete topic with id: ${id}??`)) {
-      this.topic.removeTopic(id).subscribe();
-      window.alert(`Topic with id: ${id} deleted successfully.`);
-      this.ngOnInit();
-    }
-  }
-  /**
-   * Modify/Update an existing topic into the databse via springboot app 
-   * with the data provided in update topic form.
-   */
-  updateTopic() {
+  searchTopic(SearchKey: number | string): void {
+    this.searchResponce = undefined;
+    this.isFound = false;
+    this.searchResult = "No match found!!";
+    this.heading = "Search results";
+    this.isSearched = true;
+    this.displayTopic = false;
+    this.isUpdating = false;
+    this.isAdding = false;
     for (let topic of this.allTopics) {
-      if (this.tempTopic.id == topic.id && this.tempTopic.name != topic.name) {
-        this.topic.updateTopicName(this.tempTopic.id, this.tempTopic.name).subscribe(
-          response => {
-          window.alert(`Yeahhhh!! Topic with id:${this.tempTopic.id} updateded successfully.`),
-          this.ngOnInit();
-        },
-          error => window.alert(`The topic name you entered already exist.`)
-        );
+      if (SearchKey == topic.id || SearchKey == topic.name) {
+        this.searchResponce = topic;
       }
     }
-    this.topic.updateTopicDecscription(this.tempTopic.id, this.tempTopic.description).subscribe();
-    window.alert(`Yeahhhh!! Topic with id:${this.tempTopic.id} updateded successfully.`),
-          this.ngOnInit();
-    this.toogleDisplay();
-    this.ngOnInit();
-  }
-  /**
-   * A method from OnInit interface which will run at the time of initialization
-   * of this class.
-   * It fetch all the topic recored from the database via springboot app.
-   */
-  ngOnInit(): void {
-    this.topic.getAllTopics().subscribe(data => this.allTopics = data);
+    if (typeof this.searchResponce != 'undefined') {
+      this.searchResult = "Match found!!";
+      this.isFound = true;
+    }
   }
 }

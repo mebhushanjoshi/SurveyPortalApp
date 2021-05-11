@@ -51,7 +51,8 @@
                 <th scope="col">Name</th>
                 <th scope="col">Description</th>
                 <th scope="col">Created by</th>
-                <th scope="col">Actions</th>
+                <th scope="col">Update</th>
+                <th scope="col">Delete</th>
             </tr>
         </thead>
         <tbody *ngFor="let topic of allTopics; let index = index">
@@ -61,9 +62,8 @@
                 <td>{{topic.name}}</td>
                 <td>{{topic.description}}</td>
                 <td>{{topic.surveyor.firstName}}&nbsp;{{topic.surveyor.lastName}}</td>
-                <td><button class="btn btn-sm btn-secondary" (click)="showUpdateForm(topic.id)">Edit</button>
-                    <button class="mx-3 btn btn-sm btn-danger" (click)="removeTopic(topic.id)">Remove</button>
-                </td>
+                <td><button class="btn btn-sm btn-secondary" (click)="showUpdateForm(topic.id)">Edit</button> </td> 
+                <td><button class="btn btn-sm btn-danger" (click)="removeTopic(topic.id)">Remove</button> </td>
             </tr>
         </tbody>
     </table>
@@ -80,7 +80,7 @@
     <form (ngSubmit)="addTopic()" #userForm="ngForm">
         <input type="text" class="form-group form-control mb-1" id="name" required [(ngModel)]="tempTopic.name"
             name="name" #name="ngModel" placeholder="Topic Name" autofocus
-            [class.is-invalid]='name.invalid && name.touched' pattern="[a-zA-Z]{3,}">
+            [class.is-invalid]='name.invalid && name.touched' pattern="[a-zA-Z ]{3,}">
         <div *ngIf="name.errors && (name.invalid && name.touched)">
             <small class="text-danger" *ngIf='name.errors.required'> Topic Name must NOT be empty</small>
             <small class="text-danger" *ngIf='name.errors.pattern'> Topic Name must be alphabets and grather then 2
@@ -88,15 +88,15 @@
         </div>
 
         <input type="text" class="mt-4 form-group form-control mb-1" id="description" required
-            [(ngModel)]="tempTopic.description" name="description" #description="ngModel" placeholder="Topic Description"
-            autofocus [class.is-invalid]='description.invalid && description.touched'>
+            [(ngModel)]="tempTopic.description" name="description" #description="ngModel"
+            placeholder="Topic Description" autofocus [class.is-invalid]='description.invalid && description.touched'>
         <div *ngIf="description.errors && (description.invalid && description.touched)">
             <small class="text-danger" *ngIf='description.errors.required'> Topic Description must NOT be empty</small>
         </div>
 
         <input type="text" class="mt-4 form-group form-control mb-1" id="surveyor" required
-            [(ngModel)]="tempTopic.surveyorId" name="surveyor" #surveyor="ngModel" placeholder="Surveyor User Name" autofocus
-            [class.is-invalid]='surveyor.invalid && surveyor.touched'>
+            [(ngModel)]="tempTopic.surveyorId" name="surveyor" #surveyor="ngModel" placeholder="Surveyor User Name"
+            autofocus [class.is-invalid]='surveyor.invalid && surveyor.touched'>
         <div *ngIf="surveyor.errors && (surveyor.invalid && surveyor.touched)">
             <small class="text-danger" *ngIf='name.errors.required'> Surveyor user name must NOT be empty</small>
         </div>
@@ -104,7 +104,8 @@
         <button type="submit" class="mt-4 btn btn-lg btn-primary" type="submit" [disabled]=" !userForm.form.valid">Add
             Topic</button>
     </form>
-    <button class="center text-light btn btn-sm btn-outline-secondary mt-3 px-5" (click)="toogleDisplay()">Show all topic</button>
+    <button class="center text-light btn btn-sm btn-outline-secondary mt-3 px-5" (click)="toogleDisplay()">Show all
+        topic</button>
 </div>
 
 <!-- Updating Topic -->
@@ -112,20 +113,23 @@
     <p>Enter the data below:</p>
     <form (ngSubmit)="updateTopic()" #userForm="ngForm">
         <input type="text" class="form-group form-control mb-1" id="name" required [(ngModel)]="tempTopic.name"
-            name="name" #name="ngModel" placeholder="New Topic Name" autofocus [class.is-invalid]='name.invalid && name.touched' pattern="[a-zA-Z]{3,}">
-            <div *ngIf="name.errors && (name.invalid && name.touched)">
-                <small class="text-danger" *ngIf='name.errors.required'> Topic Name must NOT be empty</small>
-                <small class="text-danger" *ngIf='name.errors.pattern'> Topic Name must be alphabets and grather then 2
-                    characters long </small>
-            </div>
+            name="name" #name="ngModel" placeholder="New Topic Name" autofocus
+            [class.is-invalid]='name.invalid && name.touched' pattern="[a-zA-Z ]{3,}">
+        <div *ngIf="name.errors && (name.invalid && name.touched)">
+            <small class="text-danger" *ngIf='name.errors.required'> Topic Name must NOT be empty</small>
+            <small class="text-danger" *ngIf='name.errors.pattern'> Topic Name must be alphabets and grather then 2
+                characters long </small>
+        </div>
         <input type="text" class="mt-4 form-group form-control mb-1" id="description" required
-            [(ngModel)]="tempTopic.description" name="description" #description="ngModel" placeholder="New Topic Description"
-            autofocus [class.is-invalid]='description.invalid && description.touched'>
-            <div *ngIf="description.errors && (description.invalid && description.touched)">
-                <small class="text-danger" *ngIf='description.errors.required'> Topic Description must NOT be empty</small>
-            </div>
+            [(ngModel)]="tempTopic.description" name="description" #description="ngModel"
+            placeholder="New Topic Description" autofocus
+            [class.is-invalid]='description.invalid && description.touched'>
+        <div *ngIf="description.errors && (description.invalid && description.touched)">
+            <small class="text-danger" *ngIf='description.errors.required'> Topic Description must NOT be empty</small>
+        </div>
         <button class="mt-4 btn btn-lg btn-primary" type="submit" [disabled]=" !userForm.form.valid">Update
             Topic</button>
     </form>
-    <button class="center text-light btn btn-sm btn-outline-secondary mt-3 px-5" (click)="toogleDisplay()">Show all topic</button>
+    <button class="center text-light btn btn-sm btn-outline-secondary mt-3 px-5" (click)="toogleDisplay()">Show all
+        topic</button>
 </div>

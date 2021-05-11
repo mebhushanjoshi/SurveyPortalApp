@@ -29,7 +29,7 @@ export class TakeSurveyComponent implements OnInit {
     else if(this.participantId == 26)
       this.tempQuestion= this.allQuestions[3];
     else{
-      window.alert("Invalid Id");
+      window.alert("Invalid Participation Id");
       this.showHome();
     }
   }

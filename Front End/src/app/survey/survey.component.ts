@@ -12,7 +12,7 @@ export class SurveyComponent implements OnInit {
   allsurveys: Survey[] = [];
   tempsurvey: Survey = new Survey();
   searchResponce: Survey = new Survey();
-  searchKey: number| string;
+  searchKey: number | string;
   isSearched: boolean = false;
   heading: string = "All Surveys";
   searchResult: string;
@@ -21,27 +21,26 @@ export class SurveyComponent implements OnInit {
   isAdding: boolean = false;
   isUpdating: boolean = false;
 
-  constructor(private survey: SurveyDataService){}
+  constructor(private survey: SurveyDataService) { }
 
-  searchSurvey(SearchKey: number| string): void{
+  searchSurvey(SearchKey: number | string): void {
     this.searchResponce = undefined;
     this.isFound = false;
     this.searchResult = "No match found!!";
-    this.heading="Search results";
-    this.isSearched=true;
+    this.heading = "Search results";
+    this.isSearched = true;
     this.displaySurvey = false;
-    for( let survey of this.allsurveys)
-    {
-      if(SearchKey == survey.id){
+    for (let survey of this.allsurveys) {
+      if (SearchKey == survey.id) {
         this.searchResponce = survey;
       }
     }
-    if(typeof this.searchResponce != 'undefined'){
-      this.searchResult= "Match found!!";
+    if (typeof this.searchResponce != 'undefined') {
+      this.searchResult = "Match found!!";
       this.isFound = true;
     }
   }
-  toogleDisplay(){
+  toogleDisplay() {
     this.isSearched = false;
     this.displaySurvey = true;
     this.isAdding = false;
@@ -49,14 +48,14 @@ export class SurveyComponent implements OnInit {
     this.heading = "All surveys";
     this.ngOnInit();
   }
-  showForm(){
+  showForm() {
     this.displaySurvey = false;
     this.isSearched = false;
     this.isUpdating = false;
     this.isAdding = true;
     this.heading = "Add survey";
   }
-  showForm2(id: number){
+  showForm2(id: number) {
     this.displaySurvey = false;
     this.isSearched = false;
     this.isAdding = false;
@@ -64,41 +63,45 @@ export class SurveyComponent implements OnInit {
     this.heading = "Update survey";
     this.tempsurvey.id = id;
   }
-  addsurvey(){
-    console.log(this.tempsurvey);
+  addsurvey() {
     this.survey.addSurvey(this.tempsurvey).subscribe(
       data => {
         window.alert(`Hooray!! A new Survey added successfully.`);
         this.ngOnInit();
+        this.toogleDisplay();
       },
       error => console.log()
       //window.alert("Invalid Survey ID")
     );
-    this.ngOnInit();  
+    this.ngOnInit();
   }
-  closesurvey(id: number){
+  closesurvey(id: number) {
     this.survey.closesurvey(id).subscribe();
     this.ngOnInit();
     this.toogleDisplay();
+    this.ngOnInit();
   }
 
-  updateSurvey(){
+  updateSurvey() {
     this.survey.updateSurvey(this.tempsurvey.id, this.tempsurvey.description).subscribe(
       data => {
         window.alert(`Hooray!! A new Survey updated successfully.`);
+        this.ngOnInit();
+        this.toogleDisplay();
         this.ngOnInit();
       },
       error => console.log()
       //window.alert("Invalid Survey ID")
     );
-    this.ngOnInit();  
+    this.toogleDisplay();
+    this.ngOnInit();
   }
 
-  removesurvey(id: number) { 
-    if(window.confirm(`Sure you want to delete survey with id: ${id}??`)){
-        this.survey.removeSurvey(id).subscribe();
+  removesurvey(id: number) {
+    if (window.confirm(`Sure you want to delete survey with id: ${id}??`)) {
+      this.survey.removeSurvey(id).subscribe();
       window.alert(`survey with id: ${id} deleted successfully.`);
-    this.ngOnInit();
+      this.ngOnInit();
     }
   }
 
